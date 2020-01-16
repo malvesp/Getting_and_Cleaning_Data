@@ -35,7 +35,7 @@ activity_labels.txt contains the encoding of the 6 activities:
 
 features.txt contains the measured variables (originally 561)
 
-*During the data manipulation tasks I discovered that there are duplicate variable names in this vector. 
+* During the data manipulation tasks I discovered that there are duplicate variable names in this vector. 
 
 It was then necessary to rename them
 
@@ -47,17 +47,25 @@ y_(test/train).txt contains the code of each activity (1 to 6)
 
 The modifications made were: 
 
+* load necesary librarys
+
 if (!require("tidyverse")) {
    install.packages("tidyverse")}
 library(tidyverse)
+
+* create working diretory 
 
 data.dir = path.expand("~/Getting_and_Cleaning_Data/data")
 dir.create(data.dir, recursive=T)
 setwd(data.dir)
 
+* getting raw data
+
 url <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
 download.file(url , destfile = "HARUS.zip" )
 unzip("HARUS.zip")
+
+* manipulating data
 
 variables <- read.table("UCI HAR Dataset/features.txt" , header = FALSE)
 variables <- as.character(variables[,2])  ### vetor with variable names
@@ -71,15 +79,22 @@ grep("mean|std", x = v_dupl)
 *replacing duplicate descriptions with innocuous descriptions
 variables[ind_dupl] <- paste("new_descricao" , seq(1:84) , sep ="")
 
+
 activity_labels <- read.table("./UCI HAR Dataset/activity_labels.txt", header = FALSE)
+
 activity_labels <- as.character(activity_labels[,2])  ###vetor with activities labels
 
 tmp_train_X <- read.table("./UCI HAR Dataset/train/X_train.txt" , header = FALSE) 
+
 tmp_train_Y <- read.table("./UCI HAR Dataset/train/y_train.txt", header = FALSE) 
+
 tmp_train_subjects <- read.table("./UCI HAR Dataset/train/subject_train.txt", header = FALSE) 
 
+
 tmp_test_X <- read.table("./UCI HAR Dataset/test/X_test.txt", header = FALSE) 
+
 tmp_test_Y <- read.table("./UCI HAR Dataset/test/y_test.txt", header = FALSE) 
+
 tmp_test_subjects <- read.table("./UCI HAR Dataset//test/subject_test.txt", header = FALSE)  
 
 tmp_train <- data.frame(tmp_train_subjects,tmp_train_Y, tmp_train_X)
