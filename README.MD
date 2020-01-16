@@ -33,42 +33,40 @@ activity_labels.txt contains the encoding of the 6 activities:
 5 STANDING
 6 LAYING
 
-features.txt contains the measured variables (originally 561)
+__features.txt contains the measured variables (originally 561)__
 
-* During the data manipulation tasks I discovered that there are duplicate variable names in this vector. 
+*During the data manipulation tasks I discovered that there are duplicate variable names in this vector. 
+*It was then necessary to rename them
 
-It was then necessary to rename them
+__subject_(test/train).txt contains the identifier of the persons tested (1 to 30)__
 
-subject_(test/train).txt contains the identifier of the persons tested (1 to 30)
+__X_(test/train).txt contains the observations for each variable__
 
-X_(test/train).txt contains the observations for each variable
+__y_(test/train).txt contains the code of each activity (1 to 6)__
 
-y_(test/train).txt contains the code of each activity (1 to 6)
-
-The modifications made were: 
-
-* load necesary librarys
+*The modifications made were: 
+*load necesary librarys
 
 if (!require("tidyverse")) {
    install.packages("tidyverse")}
 library(tidyverse)
 
-* create working diretory 
+*create working diretory 
 
 data.dir = path.expand("~/Getting_and_Cleaning_Data/data")
 dir.create(data.dir, recursive=T)
 setwd(data.dir)
 
-* getting raw data
+*getting raw data
 
 url <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
 download.file(url , destfile = "HARUS.zip" )
 unzip("HARUS.zip")
 
-* manipulating data
+*manipulating data
 
 variables <- read.table("UCI HAR Dataset/features.txt" , header = FALSE)
-variables <- as.character(variables[,2])  ### vetor with variable names
+variables <- as.character(variables[,2])  
 
 *find duplicates descriptions in variables
 ind_dupl <- duplicated(variables)
