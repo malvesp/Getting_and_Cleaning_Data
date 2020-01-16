@@ -1,4 +1,4 @@
-##Human Activity Recognition Using Smartphones:
+## Human Activity Recognition Using Smartphones:
 
 
 Source:
@@ -21,7 +21,7 @@ Data were collected using the url source:
 
  https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
 
-##Project Modified:
+## Project Modified:
 For our study we are only interested in extracting the means and standard deviations of each observation.
 
 Where:
@@ -34,7 +34,7 @@ activity_labels.txt contains the encoding of the 6 activities:
 6 LAYING
 
 features.txt contains the measured variables (originally 561)
-!During the data manipulation tasks I discovered that there are duplicate variable names in this vector. 
+*During the data manipulation tasks I discovered that there are duplicate variable names in this vector. 
 It was then necessary to rename them
 subject_(test/train).txt contains the identifier of the persons tested (1 to 30)
 X_(test/train).txt contains the observations for each variable
@@ -56,25 +56,25 @@ unzip("HARUS.zip")
 variables <- read.table("UCI HAR Dataset/features.txt" , header = FALSE)
 variables <- as.character(variables[,2])  ### vetor with variable names
 
-find duplicates descriptions in variables
+*find duplicates descriptions in variables
 ind_dupl <- duplicated(variables)
- create a vetor with dupicated
+* create a vetor with dupicated
 v_dupl <- variables[ind_dupl]
- test se in duplicated exist mean ou std part
+* test se in duplicated exist mean ou std part
 grep("mean|std", x = v_dupl)
-replacing duplicate descriptions with innocuous descriptions
+*replacing duplicate descriptions with innocuous descriptions
 variables[ind_dupl] <- paste("new_descricao" , seq(1:84) , sep ="")
 
 activity_labels <- read.table("./UCI HAR Dataset/activity_labels.txt", header = FALSE)
 activity_labels <- as.character(activity_labels[,2])  ###vetor with activities labels
 
-tmp_train_X <- read.table("./UCI HAR Dataset/train/X_train.txt" , header = FALSE) #measures train
-tmp_train_Y <- read.table("./UCI HAR Dataset/train/y_train.txt", header = FALSE) #activities train
-tmp_train_subjects <- read.table("./UCI HAR Dataset/train/subject_train.txt", header = FALSE) #subjects 
+tmp_train_X <- read.table("./UCI HAR Dataset/train/X_train.txt" , header = FALSE) 
+tmp_train_Y <- read.table("./UCI HAR Dataset/train/y_train.txt", header = FALSE) 
+tmp_train_subjects <- read.table("./UCI HAR Dataset/train/subject_train.txt", header = FALSE) 
 
-tmp_test_X <- read.table("./UCI HAR Dataset/test/X_test.txt", header = FALSE)  # measures test
-tmp_test_Y <- read.table("./UCI HAR Dataset/test/y_test.txt", header = FALSE)  # activities test
-tmp_test_subjects <- read.table("./UCI HAR Dataset//test/subject_test.txt", header = FALSE)  #subjects 
+tmp_test_X <- read.table("./UCI HAR Dataset/test/X_test.txt", header = FALSE) 
+tmp_test_Y <- read.table("./UCI HAR Dataset/test/y_test.txt", header = FALSE) 
+tmp_test_subjects <- read.table("./UCI HAR Dataset//test/subject_test.txt", header = FALSE)  
 
 tmp_train <- data.frame(tmp_train_subjects,tmp_train_Y, tmp_train_X)
 tmp_test  <- data.frame(tmp_test_subjects,tmp_test_Y, tmp_test_X)
@@ -110,18 +110,31 @@ new_names <- gsub("[[:punct:]]", "", x= ori_names)
  X,Y,Z > Axis X, Axis Y, Axis Z
 
 new_names <- gsub("^t" , "Time " , new_names)
+
 new_names <- gsub("^f" , "Frequence " , new_names)
+
 new_names <- gsub("std" , "Standard Deviation " , new_names)
+
 new_names <- gsub("Acc" , "Accelometer Measurement  " , new_names)
+
 new_names <- gsub("Body" , "Body Movement " , new_names)
+
 new_names <- gsub("Gravity" , "Acceleration of Gravity " , new_names)
+
 new_names <- gsub("Gyro" , "Gyroscopic Measurements " , new_names)
+
 new_names <- gsub("Jerk" , "Sudden Movement Acceleration " , new_names)
+
 new_names <- gsub("Mag" , "Magnitude of Moviment " , new_names)
+
 new_names <- gsub("X$" , "Axis X" , new_names)
+
 new_names <- gsub("Y$" , "Axis Y" , new_names)
+
 new_names <- gsub("Z$" , "Axis Z" , new_names)
+
 new_names <- gsub("mean" , "Mean " , new_names)
+
 new_names <- gsub("Freq" , "Frequence " , new_names)
 
 names(data_full) <- new_names
