@@ -34,13 +34,19 @@ activity_labels.txt contains the encoding of the 6 activities:
 6 LAYING
 
 features.txt contains the measured variables (originally 561)
+
 *During the data manipulation tasks I discovered that there are duplicate variable names in this vector. 
+
 It was then necessary to rename them
+
 subject_(test/train).txt contains the identifier of the persons tested (1 to 30)
+
 X_(test/train).txt contains the observations for each variable
+
 y_(test/train).txt contains the code of each activity (1 to 6)
 
 The modifications made were: 
+
 if (!require("tidyverse")) {
    install.packages("tidyverse")}
 library(tidyverse)
