@@ -211,4 +211,5 @@ names(data_full_group_avg) <- old_names
 write.csv(data_full_group_avg ,file = "data_full_group_avg.csv")
 
 *compress  files*
+
 zip(zipfile = "data.zip", files = c("data_full.csv", "data_full_group_avg.csv"))
