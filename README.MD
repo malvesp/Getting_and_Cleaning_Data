@@ -38,11 +38,11 @@ __features.txt contains the measured variables (originally 561)__
 *During the data manipulation tasks I discovered that there are duplicate variable names in this vector.*
 *It was then necessary to rename them*
 
-**subject_(test/train).txt contains the identifier of the persons tested (1 to 30)
+**subject_(test/train).txt contains the identifier of the persons tested (1 to 30)**
 
-**X_(test/train).txt contains the observations for each variable__
+**X_(test/train).txt contains the observations for each variable**
 
-**y_(test/train).txt contains the code of each activity (1 to 6)
+**y_(test/train).txt contains the code of each activity (1 to 6)**
 
 *The modifications made were:* 
 *load necesary librarys*
@@ -69,12 +69,19 @@ variables <- read.table("UCI HAR Dataset/features.txt" , header = FALSE)
 variables <- as.character(variables[,2])  
 
 *find duplicates descriptions in variables*
+
 ind_dupl <- duplicated(variables)
+
 *create a vetor with dupicated*
+
 v_dupl <- variables[ind_dupl]
+
 *test se in duplicated exist mean ou std part*
+
 grep("mean|std", x = v_dupl)
+
 *replacing duplicate descriptions with innocuous descriptions*
+
 variables[ind_dupl] <- paste("new_descricao" , seq(1:84) , sep ="")
 
 
@@ -96,10 +103,13 @@ tmp_test_Y <- read.table("./UCI HAR Dataset/test/y_test.txt", header = FALSE)
 tmp_test_subjects <- read.table("./UCI HAR Dataset//test/subject_test.txt", header = FALSE)  
 
 tmp_train <- data.frame(tmp_train_subjects,tmp_train_Y, tmp_train_X)
+
 tmp_test  <- data.frame(tmp_test_subjects,tmp_test_Y, tmp_test_X)
 
 include columns names "subject" e "activity"
+
 names(tmp_train) <- c ("subject" , "activity" , variables)
+
 names(tmp_test) <- c ("subject" , "activity" , variables)
 
 include descriptive activity 
@@ -107,6 +117,7 @@ tmp_test$activity <- activity_labels[tmp_test$activity]
 tmp_train$activity <- activity_labels[tmp_train$activity]
 
 data_test <- select(tmp_test,  grep("subject|activity|mean()|std()", names(tmp_test), value = TRUE))
+
 data_train <- select(tmp_train,  grep("subject|activity|mean()|std()", names(tmp_train), value = TRUE))
 
 data_full <- rbind(data_test, data_train) 
@@ -118,16 +129,27 @@ ori_names <- names(data_full)
 new_names <- gsub("[[:punct:]]", "", x= ori_names)
 
 *replace :*
+
  *prefix t > Time* 
+ 
  *prefix f > Frequence*
+ 
  *std > Standard Deviation*
+ 
  *Acc > Accelometer Measurement*
+ 
  *Body > Body Movement*
+ 
  *Gravity > Acceleration of Gravity*
+ 
  *Gyro > Gyroscopic measurements*
+ 
  *Jerk > Sudden Movement Acceleration*
+ 
  *Mag > Magnitude of Moviment*
+ 
  *X,Y,Z > Axis X, Axis Y, Axis Z*
+ 
 
 new_names <- gsub("^t" , "Time " , new_names)
 
@@ -160,6 +182,7 @@ new_names <- gsub("Freq" , "Frequence " , new_names)
 names(data_full) <- new_names
 
 *save full dataset*
+
 write.csv(data_full ,file = "data_full.csv")
 
 group by subject and activity
@@ -170,8 +193,11 @@ data_full_group <- group_by(data_full, subject, activity)
 data_full_group_avg <- summarise_each(data_full_group, mean)
 
 *Include the expression Average in names of new dataset*
+
 old_names <- names(data_full_group_avg)
+
 old_names[3:81] <- paste("Average " , old_names[3:81] , sep = "")  
+
 names(data_full_group_avg) <- old_names
 
  *write the second dataset*
