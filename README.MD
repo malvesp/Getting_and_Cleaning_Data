@@ -112,17 +112,23 @@ names(tmp_train) <- c ("subject" , "activity" , variables)
 
 names(tmp_test) <- c ("subject" , "activity" , variables)
 
-include descriptive activity 
+*include descriptive activity*
+
 tmp_test$activity <- activity_labels[tmp_test$activity]
+
 tmp_train$activity <- activity_labels[tmp_train$activity]
+
 
 data_test <- select(tmp_test,  grep("subject|activity|mean()|std()", names(tmp_test), value = TRUE))
 
 data_train <- select(tmp_train,  grep("subject|activity|mean()|std()", names(tmp_train), value = TRUE))
 
+*merge the two databases
+
 data_full <- rbind(data_test, data_train) 
 
 *Label the dataset with descriptive variables names and other improvements*
+
 ori_names <- names(data_full)
 
 *remove "-()"*
