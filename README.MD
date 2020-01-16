@@ -35,8 +35,8 @@ activity_labels.txt contains the encoding of the 6 activities:
 
 __features.txt contains the measured variables (originally 561)__
 
-*During the data manipulation tasks I discovered that there are duplicate variable names in this vector. 
-*It was then necessary to rename them
+*During the data manipulation tasks I discovered that there are duplicate variable names in this vector.*
+*It was then necessary to rename them*
 
 __subject_(test/train).txt contains the identifier of the persons tested (1 to 30)__
 
@@ -44,43 +44,43 @@ __X_(test/train).txt contains the observations for each variable__
 
 __y_(test/train).txt contains the code of each activity (1 to 6)__
 
-*The modifications made were: 
-*load necesary librarys
+*The modifications made were:* 
+*load necesary librarys*
 
 if (!require("tidyverse")) {
    install.packages("tidyverse")}
 library(tidyverse)
 
-*create working diretory 
+*create working diretory* 
 
 data.dir = path.expand("~/Getting_and_Cleaning_Data/data")
 dir.create(data.dir, recursive=T)
 setwd(data.dir)
 
-*getting raw data
+*getting raw data*
 
 url <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
 download.file(url , destfile = "HARUS.zip" )
 unzip("HARUS.zip")
 
-*manipulating data
+*manipulating data*
 
 variables <- read.table("UCI HAR Dataset/features.txt" , header = FALSE)
 variables <- as.character(variables[,2])  
 
-*find duplicates descriptions in variables
+*find duplicates descriptions in variables*
 ind_dupl <- duplicated(variables)
-* create a vetor with dupicated
+*create a vetor with dupicated*
 v_dupl <- variables[ind_dupl]
-* test se in duplicated exist mean ou std part
+*test se in duplicated exist mean ou std part*
 grep("mean|std", x = v_dupl)
-*replacing duplicate descriptions with innocuous descriptions
+*replacing duplicate descriptions with innocuous descriptions*
 variables[ind_dupl] <- paste("new_descricao" , seq(1:84) , sep ="")
 
 
 activity_labels <- read.table("./UCI HAR Dataset/activity_labels.txt", header = FALSE)
 
-activity_labels <- as.character(activity_labels[,2])  ###vetor with activities labels
+activity_labels <- as.character(activity_labels[,2])  
 
 tmp_train_X <- read.table("./UCI HAR Dataset/train/X_train.txt" , header = FALSE) 
 
@@ -111,22 +111,23 @@ data_train <- select(tmp_train,  grep("subject|activity|mean()|std()", names(tmp
 
 data_full <- rbind(data_test, data_train) 
 
- Label the dataset with descriptive variables names and other improvements
+*Label the dataset with descriptive variables names and other improvements*
 ori_names <- names(data_full)
 
-remove "-()"
+*remove "-()"*
 new_names <- gsub("[[:punct:]]", "", x= ori_names)
- replace :
- prefix t > Time 
- prefix f > Frequence
- std > Standard Deviation
- Acc > Accelometer Measurement 
- Body > Body Movement
- Gravity > Acceleration of Gravity
- Gyro > Gyroscopic measurements
- Jerk > Sudden Movement Acceleration
- Mag > Magnitude of Moviment 
- X,Y,Z > Axis X, Axis Y, Axis Z
+
+*replace :*
+ *prefix t > Time* 
+ *prefix f > Frequence*
+ *std > Standard Deviation*
+ *Acc > Accelometer Measurement*
+ *Body > Body Movement*
+ *Gravity > Acceleration of Gravity*
+ *Gyro > Gyroscopic measurements*
+ *Jerk > Sudden Movement Acceleration*
+ *Mag > Magnitude of Moviment*
+ *X,Y,Z > Axis X, Axis Y, Axis Z*
 
 new_names <- gsub("^t" , "Time " , new_names)
 
@@ -158,24 +159,24 @@ new_names <- gsub("Freq" , "Frequence " , new_names)
 
 names(data_full) <- new_names
 
-#save full dataset
+*save full dataset*
 write.csv(data_full ,file = "data_full.csv")
 
 group by subject and activity
 data_full_group <- group_by(data_full, subject, activity)
 
- calcule mean group by
+ *calcule mean group by*
 
 data_full_group_avg <- summarise_each(data_full_group, mean)
 
-Include the expression Average in names of new dataset
+*Include the expression Average in names of new dataset*
 old_names <- names(data_full_group_avg)
 old_names[3:81] <- paste("Average " , old_names[3:81] , sep = "")  
 names(data_full_group_avg) <- old_names
 
- write the second dataset
+ *write the second dataset*
 
 write.csv(data_full_group_avg ,file = "data_full_group_avg.csv")
 
-compress  files
+*compress  files*
 zip(zipfile = "data.zip", files = c("data_full.csv", "data_full_group_avg.csv"))
